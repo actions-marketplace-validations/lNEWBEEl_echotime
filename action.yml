@@ -1,20 +1,34 @@
-name: 'echo time by lNEWBEEl'
-description: '此Action将输出当前时间'
-author: 'Your Name'
+name: 'echo randomNum by lNEWBEEl'
+description: 'This Action will output a random number'
+author: 'MingXi Feng'
 branding:
   icon: 'clock'
   color: 'gray-dark'
 
-inputs:
-  time-format:
-    description: '时间格式（默认为ISO格式）'
-    required: false
-    default: 'iso'
-
 outputs:
-  current-time:
-    description: '输出当前时间'
-
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: "composite"
+  steps:
+    - name: 'Checkout Repository'
+      uses: 'actions/checkout@v2'
+      with:
+        # Repository name with owner. For example, actions/checkout
+        # Default: ${{ github.repository }}
+        repository: 'lNEWBEEl/echorandomnum'
+      
+    - name: 'random-number-generator'
+      run: echo "random-id=$(echo $RANDOM)"
+      shell: bash
+      
+    - name: 'random-js'
+      run: |
+        node ./randomnum.js
+      shell: bash
+      
+    - name: 'curl-page'
+      run: |
+        curl https://www.baidu.com
+      shell: bash
